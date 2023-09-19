@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Week {
+  id Int @id @default(autoincrement())
+  hours Float @default(0) 
+
+  days Day[]
+
+  @@map("weeks")
+}
+
+model Day {
+  id Int @id @default(autoincrement())
+  hours Float @default(0) 
+  date DateTime @default(now())
+
+  week Int
+  Week Week? @relation(fields: [week], references: [id])
+
+  tarefas Task[]
+  @@map("days")
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  title String
+  desc String 
+  primeira_hora String
+  ultima_hora String
+
+  day Int
+  Day Day? @relation(fields: [day], references: [id])
+
+  categorie Int
+  Categorie Categorie? @relation(fields: [categorie], references: [id])
+
+  @@map("tasks")
+}
+
+model Categorie {
+
+  id Int @id @default(autoincrement())
+  title String
+  color String
+
+  task Task[]
+  @@map("categories")
+
+}

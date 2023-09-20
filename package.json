@@ -2,7 +2,7 @@
   "scripts": {
     "create": "npx prisma db push",
     "dev": "node src/index.js",
-    "deploy": "npx prisma generate & npx prisma db push"
+    "deploy": "npx prisma generate"
   },
   "devDependencies": {
     "prisma": "^5.1.1"

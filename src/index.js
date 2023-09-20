@@ -140,7 +140,8 @@ async function checkNeedsCreate() {
 
   } else {
 
-    return weeks[0]
+    let weeksReorganized = weeks[0].sort((a, b) => a.id - b.id)
+    return weeksReorganized
 
   }
 
@@ -238,7 +239,7 @@ async function updateTime() {
 
     })
   }
-return weeks[0]
+  return weeks[0]
 
 }
 

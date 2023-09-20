@@ -45,26 +45,46 @@ async function checkNeedsCreate() {
     }
   })
 
-  // console.log(`${weeks[0].days[6].date.getFullYear()} < ${ano}? ${weeks[0].days[6].date.getFullYear() < ano}`)
-
   
+  if (!!weeks[0]) {
+    
+    console.log(`${weeks[0].days[6].date.getFullYear()} < ${ano}? ${weeks[0].days[6].date.getFullYear() < ano}`)
+    if (weeks[0].days[6].date.getFullYear() < ano) {
 
-  if (weeks[0].days[6].date.getFullYear() < ano) {
+      needsCreate = true
 
-    needsCreate = true
+    }
 
-  }
+    console.log(`${weeks[0].days[6].date.getMonth()} < ${mes} && ${weeks[0].days[6].date.getFullYear()} == ${ano}? ${weeks[0].days[6].date.getMonth() < mes && weeks[0].days[6].date.getFullYear() == ano}`)
 
-  // console.log(`${weeks[0].days[6].date.getMonth()} < ${mes} && ${weeks[0].days[6].date.getFullYear()} == ${ano}? ${weeks[0].days[6].date.getMonth() < mes && weeks[0].days[6].date.getFullYear() == ano}`)
-  if (weeks[0].days[6].date.getMonth() < mes && weeks[0].days[6].date.getFullYear() == ano) {
+    if (weeks[0].days[6].date.getMonth() < mes && weeks[0].days[6].date.getFullYear() == ano) {
 
-    // console.log(`${weeks[0].days[6].date.getMonth()} < ${mes}? ${weeks[0].days[6].date.getMonth() < mes}`)
-    needsCreate = true
+      // console.log(`${weeks[0].days[6].date.getMonth()} < ${mes}? ${weeks[0].days[6].date.getMonth() < mes}`)
+      needsCreate = true
 
-  }
+    }
 
-  console.log(`${weeks[0].days[6].date.getMonth()} < ${mes}? ${weeks[0].days[6].date.getMonth() < mes}`)  
-  if (weeks[0].days[6].date.getDate() < dia && weeks[0].days[6].date.getMonth() == mes && weeks[0].days[6].date.getFullYear() == ano) {
+    let lastDay = weeks[0].days[0].date.getDate()
+
+    weeks[0].days.map(days => {
+
+      if (lastDay < days.date.getDate()) {
+
+        lastDay = days.date.getDate()
+        lastDayID = days.id
+
+      }
+
+    })
+
+    console.log(`${lastDay} < ${dia} && ${weeks[0].days[6].date.getMonth()} == ${mes} && ${weeks[0].days[6].date.getFullYear()} == ${ano}? ${lastDay < dia && weeks[0].days[6].date.getMonth() == mes && weeks[0].days[6].date.getFullYear() == ano}`)
+    if (lastDay < dia && weeks[0].days[6].date.getMonth() == mes && weeks[0].days[6].date.getFullYear() == ano) {
+
+      needsCreate = true
+
+    }
+
+  }else{
 
     needsCreate = true
 
@@ -72,20 +92,23 @@ async function checkNeedsCreate() {
 
   if (needsCreate) {
 
-    // console.log("criou")
+    console.log("criou")
 
     weekCreated = await prisma.week.create()
+    console.log(weekCreated.id)
 
     for (var i = 0; i <= 6; i++) {
 
       let date = new Date()
       date.setDate(dia + i)
 
-      let day = await prisma.day.create({
+      console.log(date)
+
+      await prisma.day.create({
 
         data: {
 
-          date: date.toISOString(),
+          date: date,
           week: weekCreated.id,
 
         }
@@ -174,7 +197,7 @@ async function updateTime() {
           // console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}`)
           // console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}`)
 
-          
+
           // console.log((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual))
           if ((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual)) {
 
@@ -215,9 +238,42 @@ async function updateTime() {
 
     })
   }
-  return weeks[0]
+return weeks[0]
 
 }
+
+// app.get("/delete-all", async (req, res) => {
+
+//   await prisma.day.deleteMany({
+
+//     where: {
+
+//       id: {
+
+//         gte: 0
+
+//       }
+
+//     }
+
+//   })
+
+//   await prisma.week.deleteMany({
+
+//     where: {
+
+//       id: {
+
+//         gte: 0
+
+//       }
+
+//     }
+
+//   })
+
+//   res.status(200)
+// })
 
 app.get('/weeks', async (req, res) => {
 
@@ -251,92 +307,92 @@ app.get('/update-week-minute-count', async (req, res) => {
 
 });
 
-// app.post('/task-create', async (req, res) => {
+app.post('/task-create', async (req, res) => {
 
-//   const { day, categorie, title, desc, primeira_hora, ultima_hora } = req.body;
+  const { day, categorie, title, desc, primeira_hora, ultima_hora } = req.body;
 
-//   let task = await prisma.task.create({
+  let task = await prisma.task.create({
 
-//     data: {
+    data: {
 
-//       day,
-//       categorie: Number(categorie),
-//       title,
-//       desc,
-//       primeira_hora,
-//       ultima_hora,
+      day,
+      categorie: Number(categorie),
+      title,
+      desc,
+      primeira_hora,
+      ultima_hora,
 
-//     }
+    }
 
-//   })
+  })
 
-//   res.send(JSON.stringify(task))
+  res.send(JSON.stringify(task))
 
-// });
+});
 
-// app.post('/task-delete', async (req, res) => {
+app.post('/task-delete', async (req, res) => {
 
-//   const { id } = req.body;
+  const { id } = req.body;
 
-//   await prisma.task.delete({
+  await prisma.task.delete({
 
-//     where: {
+    where: {
 
-//       id,
+      id,
 
-//     }
+    }
 
-//   })
+  })
 
-//   res.sendStatus(200)
+  res.sendStatus(200)
 
-// });
+});
 
-// app.post('/categorie-create', async (req, res) => {
+app.post('/categorie-create', async (req, res) => {
 
-//   const { title, color } = req.body;
+  const { title, color } = req.body;
 
-//   let categorie = await prisma.categorie.create({
+  let categorie = await prisma.categorie.create({
 
-//     data: {
+    data: {
 
-//       title,
-//       color,
+      title,
+      color,
 
-//     }
+    }
 
-//   })
+  })
 
-//   res.send(JSON.stringify(categorie))
+  res.send(JSON.stringify(categorie))
 
-// });
+});
 
-// app.post('/categorie-delete', async (req, res) => {
+app.post('/categorie-delete', async (req, res) => {
 
-//   const { id } = req.body;
+  const { id } = req.body;
 
-//   await prisma.categorie.delete({
+  await prisma.categorie.delete({
 
-//     where: {
+    where: {
 
-//       id,
+      id,
 
-//     }
+    }
 
-//   })
+  })
 
-//   res.sendStatus(200)
+  res.sendStatus(200)
 
-// });
+});
 
-// schedule.scheduleJob('* * * * *', async function () {
+schedule.scheduleJob('* * * * *', async function () {
 
-//   updateTime()
+  updateTime()
 
-// })
+})
 
 const port = process.env.PORT || 4000
 
 app.listen(port, () => {
-  console.log(port == 4000? `Server is running on http://localhost:${port}`: `Server is running on ${port}`);
+  console.log(port == 4000 ? `Server is running on http://localhost:${port}` : `Server is running on ${port}`);
 });

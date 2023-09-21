@@ -8,6 +8,16 @@ const app = express();
 app.use(bodyParser.json())
 app.use(cors());
 
+function weekReorganizer(data) {
+  let arr = data.days
+  arr.sort((a, b) => a.id - b.id);
+  
+  let newData = data
+  newData.days = arr
+  return newData;
+}
+
+
 async function checkNeedsCreate() {
 
   let needsCreate = false
@@ -71,7 +81,6 @@ async function checkNeedsCreate() {
       if (lastDay < days.date.getDate()) {
 
         lastDay = days.date.getDate()
-        lastDayID = days.id
 
       }
 
@@ -136,12 +145,11 @@ async function checkNeedsCreate() {
 
   if (needsCreate) {
 
-    return weekCreated
+    return weekReorganizer(weekCreated)
 
   } else {
 
-    // let weeksReorganized = weeks[0].sort((a, b) => a.id - b.id)
-    return weeks[0]
+    return weekReorganizer(weeks[0])
 
   }
 

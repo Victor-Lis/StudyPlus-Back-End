@@ -232,13 +232,12 @@ async function updateTime() {
           let horaAtual = new Date().getHours()
           let minutoAtual = new Date().getMinutes()
 
-          // console.log(`${firstHour} < ${horaAtual}? ${firstHour < horaAtual}`)
-          // console.log(`${firstHour} == ${horaAtual}? ${firstHour == horaAtual} && ${firstMinute} <= ${minutoAtual}? ${firstMinute <= minutoAtual}`)
-          // console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}`)
-          // console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}`)
-
+          console.log(`${firstHour} < ${horaAtual}? ${firstHour < horaAtual}`)
+          console.log(`${firstHour} == ${horaAtual}? ${firstHour == horaAtual} && ${firstMinute} <= ${minutoAtual}? ${firstMinute <= minutoAtual}`)
+          console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}`)
+          console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}`)
  
-          // console.log((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual))
+          console.log((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual))
           if ((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual)) {
 
             updatedDay = index

@@ -106,6 +106,40 @@ async function checkNeedsCreate() {
     weekCreated = await prisma.week.create()
     console.log(weekCreated.id)
 
+    function setDate(index){
+
+      if(index == 0){
+
+        return "Segunda"
+
+      }else if(index == 1){
+
+        return "Terça"
+
+      }else if(index == 2){
+
+        return "Quarta"
+
+      }else if(index == 3){
+
+        return "Quinta"
+
+      }else if(index == 4){
+
+        return "Sexta"
+
+      }else if(index == 5){
+
+        return "Sábado"
+
+      }else if(index == 6){
+
+        return "Domingo"
+
+      }
+
+    }
+
     for (var i = 0; i <= 6; i++) {
 
       let date = new Date()
@@ -119,6 +153,7 @@ async function checkNeedsCreate() {
 
           date: date,
           week: weekCreated.id,
+          name: setDate(i),
 
         }
 
@@ -145,7 +180,7 @@ async function checkNeedsCreate() {
 
   if (needsCreate) {
 
-    return weekReorganizer(weekCreated)
+    return weekCreated
 
   } else {
 

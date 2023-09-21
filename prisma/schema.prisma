@@ -23,6 +23,7 @@ model Day {
   id Int @id @default(autoincrement())
   hours Float @default(0) 
   date DateTime @default(now())
+  name String 
 
   week Int
   Week Week? @relation(fields: [week], references: [id])

@@ -104,7 +104,6 @@ async function checkNeedsCreate() {
     console.log("criou")
 
     weekCreated = await prisma.week.create()
-    console.log(weekCreated.id)
 
     function setDate(index){
 
@@ -144,8 +143,6 @@ async function checkNeedsCreate() {
 
       let date = new Date()
       date.setDate(dia + i)
-
-      console.log(date)
 
       await prisma.day.create({
 
@@ -223,7 +220,6 @@ async function updateTime() {
 
       // console.log(`${day.date.getDate()} == ${today.getDate()+1}? ${day.date.getDate() == today.getDate()+1}    Lin: 154`)
       if (day.date.getDate() == today.getDate()+1) {
-        console.log(day.tarefas)
 
         day.tarefas.map(async (tarefas, index) => {
 
@@ -241,7 +237,7 @@ async function updateTime() {
           // console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}`)
           // console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}`)
 
-
+ 
           // console.log((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual))
           if ((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual)) {
 

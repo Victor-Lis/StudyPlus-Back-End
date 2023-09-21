@@ -243,7 +243,9 @@ async function updateTime() {
             updatedDay = index
 
             let week = weeks[0];
+            console.log(`Before: ${week.hours}`)
             let hours = week.hours + 1.66666666667;
+            console.log(`After: ${week.hours}`)
 
             await prisma.week.update({
               where: {

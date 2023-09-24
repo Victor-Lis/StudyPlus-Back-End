@@ -366,7 +366,7 @@ app.get('/update-week-minute-count', async (req, res) => {
     res.send(JSON.stringify(data))
   }else{
 
-    res.sendStatus(200)
+    res.sendStatus(404)
 
   }
 

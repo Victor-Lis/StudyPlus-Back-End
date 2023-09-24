@@ -188,96 +188,118 @@ async function checkNeedsCreate() {
 }
 
 async function updateTime() {
-
   const today = new Date();
-  // today.setHours(0, 0, 0);
-  today.setUTCHours(0, 0, 0);
-  let todayISOS = today.toISOString()
-  todayISOS = todayISOS.slice(0, 10) + 'T00:00:00.000Z'
 
-  // console.log("RODOU")
-  // console.log(todayISOS)
+  today.setHours(0)
+  today.setMinutes(0)
+  today.setSeconds(0)
+  today.setMilliseconds(0)
+  
+  function clearTime(today){
+    today.setUTCHours(0);
+    today.setUTCMinutes(0);
+    today.setUTCSeconds(0);
+    today.setUTCMilliseconds(0);
+    return today.toISOString();
+  }
+  
+  // console.log(clearTime(today))
 
-  const weeks = await prisma.week.findMany({
+  const day = await prisma.day.findFirst({
     orderBy: {
 
       id: "desc"
 
     },
-    include: {
-      days: {
-        include: {
-          tarefas: true
-        },
-      },
-    },
-  });
+    where:{
 
-  if (weeks) {
-    weeks[0].days.map(async (day, index) => {
+      date:{
 
-      console.log(`${day.date.getDate()} == ${today.getDate()}? ${day.date.getDate() == today.getDate()}    Lin: 154`)
-      if (day.date.getDate() == today.getDate()) {
-
-        day.tarefas.map(async (tarefas, index) => {
-
-          let firstHour = Number(tarefas.primeira_hora.slice(0, 2))
-          let firstMinute = Number(tarefas.primeira_hora.slice(3, 5))
-
-          let lastHour = Number(tarefas.ultima_hora.slice(0, 2))
-          let lastMinute = Number(tarefas.ultima_hora.slice(3, 5))
-
-          let horaAtual = new Date().getHours()
-          let minutoAtual = new Date().getMinutes()
-
-          console.log(`${firstHour} < ${horaAtual}? ${firstHour < horaAtual}      Lin: 233`)
-          console.log(`${firstHour} == ${horaAtual}? ${firstHour == horaAtual} && ${firstMinute} <= ${minutoAtual}? ${firstMinute <= minutoAtual}    Lin: 234`)
-          console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}     Lin: 235`)
-          console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}     Lin: 236`)
- 
-          console.log((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual))
-          if ((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual)) {
-
-            updatedDay = index
-
-            let week = weeks[0];
-            console.log(`Before: ${week.hours}`)
-            let hours = week.hours + 1.66666666667;
-            console.log(`After: ${week.hours}`)
-
-            await prisma.week.update({
-              where: {
-                id: weeks[0].id,
-              },
-              data: {
-                hours: hours,
-              },
-            });
-
-            await prisma.day.update({
-
-              where: {
-
-                id: day.id,
-
-              },
-              data: {
-
-                hours: day.hours + 1.66666666667,
-
-              }
-
-            })
-
-          }
-
-        })
+        equals: clearTime(today)
 
       }
 
-    })
-  }
-  return weeks[0]
+    },
+    include: {
+
+      Week: true,
+      tarefas: true
+
+    }
+  })
+
+  let week;
+
+  day.tarefas.map(async (task, index) => {
+
+    let firstTime = {
+
+      hour: task.primeira_hora.slice(0, 2),
+      minutes: task.primeira_hora.slice(3, 5)
+
+    }
+
+    let lastTime = {
+
+      hour: task.ultima_hora.slice(0, 2),
+      minutes: task.ultima_hora.slice(3, 5)
+
+    }
+
+    let hora = new Date().getHours()
+    let min = new Date().getMinutes()
+
+    if((hora > firstTime.hour? true: hora == firstTime.hour? min > firstTime.minutes: false) && (hora < lastTime.hour? true: hora == lastTime.hour? min < lastTime.minutes: false)){
+
+      await prisma.day.update({
+        data: {
+
+          hours: day.hours+1.66666666667,
+
+        },
+        where:{
+    
+          id: day.id,
+    
+        },
+      })
+
+      let weekUpdated = await prisma.week.update({
+        data: {
+
+          hours: day.Week.hours +1.66666666667,
+
+        },
+        where:{
+    
+          id: day.week,
+    
+        },
+        include: {
+
+          days: true,
+
+        }
+      })
+
+      week = weekUpdated;
+
+    }else{
+
+      week = await prisma.week.findFirst({
+
+        orderBy:{
+
+          id: "desc",
+
+        }
+
+      })
+
+    }
+  })
+
+  return week;
 
 }
 
@@ -342,6 +364,10 @@ app.get('/update-week-minute-count', async (req, res) => {
 
   if (data) {
     res.send(JSON.stringify(data))
+  }else{
+
+    res.sendStatus(200)
+
   }
 
 });

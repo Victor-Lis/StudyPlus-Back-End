@@ -195,10 +195,8 @@ async function updateTime() {
   let todayISOS = today.toISOString()
   todayISOS = todayISOS.slice(0, 10) + 'T00:00:00.000Z'
 
-  // console.log(todayISOS)
-  // let updatedWeek;
-  let updatedDay;
-  // console.log("RODOU")
+  console.log("RODOU")
+  console.log(todayISOS)
 
   const weeks = await prisma.week.findMany({
     orderBy: {
@@ -218,7 +216,7 @@ async function updateTime() {
   if (weeks) {
     weeks[0].days.map(async (day, index) => {
 
-      // console.log(`${day.date.getDate()} == ${today.getDate()+1}? ${day.date.getDate() == today.getDate()+1}    Lin: 154`)
+      console.log(`${day.date.getDate()} == ${today.getDate()+1}? ${day.date.getDate() == today.getDate()+1}    Lin: 154`)
       if (day.date.getDate() == today.getDate()+1) {
 
         day.tarefas.map(async (tarefas, index) => {

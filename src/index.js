@@ -217,7 +217,7 @@ async function updateTime() {
     weeks[0].days.map(async (day, index) => {
 
       console.log(`${day.date.getDate()} == ${today.getDate()}? ${day.date.getDate() == today.getDate()+1}    Lin: 154`)
-      if (day.date.getDate() == today.getDate()+1) {
+      if (day.date.getDate() == today.getDate()) {
 
         day.tarefas.map(async (tarefas, index) => {
 

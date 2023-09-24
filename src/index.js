@@ -195,8 +195,8 @@ async function updateTime() {
   let todayISOS = today.toISOString()
   todayISOS = todayISOS.slice(0, 10) + 'T00:00:00.000Z'
 
-  console.log("RODOU")
-  console.log(todayISOS)
+  // console.log("RODOU")
+  // console.log(todayISOS)
 
   const weeks = await prisma.week.findMany({
     orderBy: {
@@ -216,7 +216,7 @@ async function updateTime() {
   if (weeks) {
     weeks[0].days.map(async (day, index) => {
 
-      console.log(`${day.date.getDate()} == ${today.getDate()}? ${day.date.getDate() == today.getDate()+1}    Lin: 154`)
+      console.log(`${day.date.getDate()} == ${today.getDate()}? ${day.date.getDate() == today.getDate()}    Lin: 154`)
       if (day.date.getDate() == today.getDate()) {
 
         day.tarefas.map(async (tarefas, index) => {
@@ -230,10 +230,10 @@ async function updateTime() {
           let horaAtual = new Date().getHours()
           let minutoAtual = new Date().getMinutes()
 
-          console.log(`${firstHour} < ${horaAtual}? ${firstHour < horaAtual}`)
-          console.log(`${firstHour} == ${horaAtual}? ${firstHour == horaAtual} && ${firstMinute} <= ${minutoAtual}? ${firstMinute <= minutoAtual}`)
-          console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}`)
-          console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}`)
+          console.log(`${firstHour} < ${horaAtual}? ${firstHour < horaAtual}      Lin: 233`)
+          console.log(`${firstHour} == ${horaAtual}? ${firstHour == horaAtual} && ${firstMinute} <= ${minutoAtual}? ${firstMinute <= minutoAtual}    Lin: 234`)
+          console.log(`${lastHour} > ${horaAtual}? ${lastHour > horaAtual}     Lin: 235`)
+          console.log(`${lastHour} == ${horaAtual}? ${lastHour == horaAtual} && ${lastMinute} >= ${minutoAtual}? ${lastMinute >= minutoAtual}     Lin: 236`)
  
           console.log((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual))
           if ((firstHour < horaAtual || firstHour == horaAtual && firstMinute <= minutoAtual) && (lastHour > horaAtual || lastHour == horaAtual && lastMinute >= minutoAtual)) {

@@ -426,11 +426,11 @@ app.post('/categorie-delete', async (req, res) => {
 
 });
 
-schedule.scheduleJob('* * * * *', async function () {
-
+setInterval(async () => {
+  
   updateTime()
 
-})
+}, 60000);
 
 const port = process.env.PORT || 4000
 

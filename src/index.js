@@ -230,7 +230,7 @@ async function updateTime() {
 
   let week;
 
-  if (day.tarefas) {
+  if (day) {
 
     day.tarefas.map(async (task, index) => {
 

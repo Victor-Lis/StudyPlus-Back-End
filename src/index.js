@@ -454,7 +454,7 @@ app.post('/categorie-delete', async (req, res) => {
 
 });
 
-schedule.scheduleInterval(60000, async () => {
+schedule.scheduleJob('*/1 * * * *', async () => {
   updateTime();
 });
 

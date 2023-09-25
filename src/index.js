@@ -454,11 +454,9 @@ app.post('/categorie-delete', async (req, res) => {
 
 });
 
-setInterval(async () => {
-
-  updateTime()
-
-}, 60000);
+schedule.scheduleInterval(60000, async () => {
+  updateTime();
+});
 
 const port = process.env.PORT || 4000
 

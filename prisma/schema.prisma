@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  timeout  = 30
 }
 
 datasource db {

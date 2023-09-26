@@ -364,14 +364,12 @@ app.get('/categories', async (req, res) => {
 app.get('/update-week-minute-count', async (req, res) => {
 
   let data = await updateTime()
-  // console.log(data)
+  console.log(data)
 
   if (data) {
     res.send(JSON.stringify(data))
   } else {
-
-    res.sendStatus(404)
-
+    res.sendStatus(200)
   }
 
 });
@@ -455,6 +453,7 @@ app.post('/categorie-delete', async (req, res) => {
 });
 
 schedule.scheduleJob('*/1 * * * *', async () => {
+  console.log("Rodando Node Schedule")
   updateTime();
 });
 

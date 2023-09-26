@@ -200,6 +200,7 @@ async function updateTime() {
     today.setUTCMinutes(0);
     today.setUTCSeconds(0);
     today.setUTCMilliseconds(0);
+    console.log(today.toISOString())
     return today.toISOString();
   }
 

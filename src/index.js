@@ -263,7 +263,9 @@ async function updateTime() {
       let hora = new Date().getHours()
       let min = new Date().getMinutes()
 
-      console.log((hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false))
+      console.log(firstTime)
+      console.log(lastTime)
+      console.log(hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)
       if ((hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)) {
 
         console.log("Caiu no if")

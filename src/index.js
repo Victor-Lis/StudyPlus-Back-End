@@ -307,34 +307,50 @@ async function updateTime() {
 
       } else {
 
-        prisma.$connect()
-        week = await prisma.week.findFirst({
+        try{
+          
+          prisma.$connect()
+          week = await prisma.week.findFirst({
+  
+            orderBy: {
+  
+              id: "desc",
+  
+            }
+  
+          })
+          prisma.$disconnect()
 
-          orderBy: {
+        }catch(e){
 
-            id: "desc",
+          console.log(e)
 
-          }
-
-        })
-        prisma.$disconnect()
+        }
 
       }
     })
 
   } else {
   
-    prisma.$connect()
-    week = await prisma.week.findFirst({
+    try{
+          
+      prisma.$connect()
+      week = await prisma.week.findFirst({
 
-      orderBy: {
+        orderBy: {
 
-        id: "desc",
+          id: "desc",
 
-      }
+        }
 
-    })
-    prisma.$disconnect()
+      })
+      prisma.$disconnect()
+
+    }catch(e){
+
+      console.log(e)
+
+    }
 
   }
 

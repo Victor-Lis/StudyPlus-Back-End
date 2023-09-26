@@ -204,6 +204,8 @@ async function updateTime() {
     return `${year}-${month}-${day}T00:00:00.000Z`;
   }
 
+  clearTime(formattedDate)
+
   let day; 
 
   try{
@@ -261,10 +263,9 @@ async function updateTime() {
 
       }
 
-      let hora = today.getHours()
-      let min = today.getMinutes()
+      let hora = parseInt(formattedDate.slice(12, 14))
+      let min = parseInt(formattedDate.slice(15, 17))
 
-      console.log(`(${hora} > ${firstTime.hour} ? true : ${hora} == ${firstTime.hour} ? ${min} > ${firstTime.minutes} : false) && (${hora} < ${lastTime.hour} ? true : ${hora} == ${lastTime.hour} ? ${min} < ${lastTime.minutes} : false)?${(hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)}`)
       if ((hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)) {
 
         console.log("Caiu no if")

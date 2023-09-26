@@ -240,8 +240,9 @@ async function updateTime() {
 
   let week;
 
-  console.log(`hasDay: ${day.tarefas}`)
-  if (day.tarefas) {
+  console.log(day)
+  console.log(`hasDay: ${!!day.tarefas}`)
+  if (!!day.tarefas) {
 
     day.tarefas.map(async (task, index) => {
 
@@ -311,6 +312,18 @@ async function updateTime() {
         })
 
       }
+    })
+
+  } else {
+
+    week = await prisma.week.findFirst({
+
+      orderBy: {
+
+        id: "desc",
+
+      }
+
     })
 
   }

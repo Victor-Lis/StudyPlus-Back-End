@@ -208,8 +208,6 @@ async function updateTime() {
 
   let day; 
 
-  try{
-    
     prisma.$connect()
     day = await prisma.day.findFirst({
       orderBy: {
@@ -232,14 +230,12 @@ async function updateTime() {
         tarefas: true
   
       }
+    }).catch(e => {
+
+      console.log(e)
+
     })
     prisma.$disconnect()
-
-  }catch(e){
-
-    console.log(e)
-
-  }
 
   let week;
 

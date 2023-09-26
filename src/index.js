@@ -26,6 +26,7 @@ async function checkNeedsCreate() {
   let mes = new Date().getMonth()
   let dia = new Date().getDate()
 
+  prisma.$connect()
   const weeks = await prisma.week.findMany({
     orderBy: {
 
@@ -54,7 +55,7 @@ async function checkNeedsCreate() {
 
     }
   })
-
+  prisma.$disconnect()
 
   if (!!weeks[0]) {
 
@@ -103,7 +104,9 @@ async function checkNeedsCreate() {
 
     console.log("criou")
 
+    prisma.$connect()
     weekCreated = await prisma.week.create()
+    prisma.$disconnect()
 
     function setDate(index) {
 
@@ -139,6 +142,7 @@ async function checkNeedsCreate() {
 
     }
 
+    prisma.$connect()
     for (var i = 0; i <= 6; i++) {
 
       let date = new Date()
@@ -157,6 +161,7 @@ async function checkNeedsCreate() {
       });
 
     }
+    prisma.$disconnect()
 
     weekCreated = await prisma.week.findMany({
       orderBy: {
@@ -209,6 +214,7 @@ async function updateTime() {
 
   try{
     
+    prisma.$connect()
     day = await prisma.day.findFirst({
       orderBy: {
   
@@ -231,6 +237,7 @@ async function updateTime() {
   
       }
     })
+    prisma.$disconnect()
 
   }catch(e){
 
@@ -273,6 +280,7 @@ async function updateTime() {
 
         console.log("Caiu no if")
 
+        prisma.$connect()
         await prisma.day.update({
           data: {
 
@@ -303,11 +311,13 @@ async function updateTime() {
 
           }
         })
+        prisma.$connect()
 
         week = weekUpdated;
 
       } else {
 
+        prisma.$connect()
         week = await prisma.week.findFirst({
 
           orderBy: {
@@ -317,12 +327,14 @@ async function updateTime() {
           }
 
         })
+        prisma.$disconnect()
 
       }
     })
 
   } else {
-
+  
+    prisma.$connect()
     week = await prisma.week.findFirst({
 
       orderBy: {
@@ -332,6 +344,7 @@ async function updateTime() {
       }
 
     })
+    prisma.$disconnect()
 
   }
 
@@ -385,7 +398,9 @@ app.get('/weeks', async (req, res) => {
 
 app.get('/categories', async (req, res) => {
 
+  prisma.$connect()
   let data = await prisma.categorie.findMany()
+  prisma.$disconnect()
 
   if (data) {
     res.send(JSON.stringify(data))
@@ -395,8 +410,10 @@ app.get('/categories', async (req, res) => {
 
 app.get('/update-week-minute-count', async (req, res) => {
 
+  prisma.$connect()
   let data = await updateTime()
   console.log(data)
+  prisma.$disconnect()
 
   if (data) {
     res.send(JSON.stringify(data))
@@ -410,6 +427,7 @@ app.post('/task-create', async (req, res) => {
 
   const { day, categorie, title, desc, primeira_hora, ultima_hora } = req.body;
 
+  prisma.$connect()
   let task = await prisma.task.create({
 
     data: {
@@ -424,6 +442,7 @@ app.post('/task-create', async (req, res) => {
     }
 
   })
+  prisma.$disconnect()
 
   res.send(JSON.stringify(task))
 
@@ -433,6 +452,7 @@ app.post('/task-delete', async (req, res) => {
 
   const { id } = req.body;
 
+  prisma.$connect()
   await prisma.task.delete({
 
     where: {
@@ -442,6 +462,7 @@ app.post('/task-delete', async (req, res) => {
     }
 
   })
+  prisma.$disconnect()
 
   res.sendStatus(200)
 
@@ -451,6 +472,7 @@ app.post('/categorie-create', async (req, res) => {
 
   const { title, color } = req.body;
 
+  prisma.$connect()
   let categorie = await prisma.categorie.create({
 
     data: {
@@ -461,6 +483,7 @@ app.post('/categorie-create', async (req, res) => {
     }
 
   })
+  prisma.$disconnect()
 
   res.send(JSON.stringify(categorie))
 
@@ -470,6 +493,7 @@ app.post('/categorie-delete', async (req, res) => {
 
   const { id } = req.body;
 
+  prisma.$connect()
   await prisma.categorie.delete({
 
     where: {
@@ -479,6 +503,7 @@ app.post('/categorie-delete', async (req, res) => {
     }
 
   })
+  prisma.$disconnect()
 
   res.sendStatus(200)
 

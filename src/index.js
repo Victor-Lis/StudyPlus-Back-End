@@ -265,6 +265,8 @@ async function updateTime() {
 
       console.log(firstTime)
       console.log(lastTime)
+      console.log(hora > firstTime.hour)
+      console.log(hora > lastTime.hour)
       console.log(hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)
       if ((hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)) {
 

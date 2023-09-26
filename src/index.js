@@ -208,6 +208,8 @@ async function updateTime() {
 
   let day; 
 
+  try{
+    
     prisma.$connect()
     day = await prisma.day.findFirst({
       orderBy: {
@@ -230,12 +232,19 @@ async function updateTime() {
         tarefas: true
   
       }
-    }).catch(e => {
+    }).then(res => res)
+    .catch(e => {
 
       console.log(e)
 
     })
     prisma.$disconnect()
+
+  }catch(e){
+
+    console.log(e)
+
+  }
 
   let week;
 
@@ -303,6 +312,8 @@ async function updateTime() {
 
       } else {
 
+        try{
+          
           prisma.$connect()
           week = await prisma.week.findFirst({
   
@@ -312,18 +323,27 @@ async function updateTime() {
   
             }
   
-          }).catch(e => {
-
+          }).then(res => res)
+          .catch(e => {
+      
             console.log(e)
-    
+      
           })
           prisma.$disconnect()
+
+        }catch(e){
+
+          console.log(e)
+
+        }
 
       }
     })
 
   } else {
   
+    try{
+          
       prisma.$connect()
       week = await prisma.week.findFirst({
 
@@ -333,12 +353,19 @@ async function updateTime() {
 
         }
 
-      }).catch(e => {
-
+      }).then(res => res)
+      .catch(e => {
+  
         console.log(e)
-
+  
       })
       prisma.$disconnect()
+
+    }catch(e){
+
+      console.log(e)
+
+    }
 
   }
 

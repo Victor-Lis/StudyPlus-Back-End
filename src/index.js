@@ -230,7 +230,8 @@ async function updateTime() {
 
   let week;
 
-  if (day) {
+  console.log(`hasDay: ${!!day}`)
+  if (!!day) {
 
     day.tarefas.map(async (task, index) => {
 
@@ -251,6 +252,7 @@ async function updateTime() {
       let hora = new Date().getHours()
       let min = new Date().getMinutes()
 
+      console.log(`Needs Update? ${(hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)}`)
       if ((hora > firstTime.hour ? true : hora == firstTime.hour ? min > firstTime.minutes : false) && (hora < lastTime.hour ? true : hora == lastTime.hour ? min < lastTime.minutes : false)) {
 
         await prisma.day.update({
@@ -454,7 +456,8 @@ app.post('/categorie-delete', async (req, res) => {
 
 schedule.scheduleJob('*/1 * * * *', async () => {
   console.log("Rodando Node Schedule")
-  updateTime();
+  let week = await updateTime();
+  console.log(week)
 });
 
 const port = process.env.PORT || 4000

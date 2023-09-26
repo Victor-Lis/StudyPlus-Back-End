@@ -161,7 +161,6 @@ async function checkNeedsCreate() {
       });
 
     }
-    prisma.$disconnect()
 
     weekCreated = await prisma.week.findMany({
       orderBy: {
@@ -175,6 +174,7 @@ async function checkNeedsCreate() {
 
       }
     })
+    prisma.$disconnect()
 
   }
 
@@ -306,7 +306,7 @@ async function updateTime() {
 
           }
         })
-        prisma.$connect()
+        prisma.$disconnect()
 
         week = weekUpdated;
 

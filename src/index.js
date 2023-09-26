@@ -248,8 +248,8 @@ async function updateTime() {
   let week;
 
   console.log(day)
-  console.log(`hasDay: ${!!day.tarefas}`)
-  if (!!day.tarefas) {
+  console.log(`hasDay: ${!!day && !!day.tarefas}`)
+  if (!!day && !!day.tarefas) {
 
     day.tarefas.map(async (task, index) => {
 

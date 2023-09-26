@@ -205,34 +205,43 @@ async function updateTime() {
   }
 
   // console.log(clearTime(today))
+  let day; 
 
-  const day = await prisma.day.findFirst({
-    orderBy: {
-
-      id: "desc"
-
-    },
-    where: {
-
-      date: {
-
-        equals: clearTime(today)
-
+  try{
+    
+    day = await prisma.day.findFirst({
+      orderBy: {
+  
+        id: "desc"
+  
+      },
+      where: {
+  
+        date: {
+  
+          equals: clearTime(today)
+  
+        }
+  
+      },
+      include: {
+  
+        Week: true,
+        tarefas: true
+  
       }
+    })
 
-    },
-    include: {
+  }catch(e){
 
-      Week: true,
-      tarefas: true
+    console.log(e)
 
-    }
-  })
+  }
 
   let week;
 
-  console.log(`hasDay: ${day}`)
-  if (day) {
+  console.log(`hasDay: ${day.tarefas}`)
+  if (day.tarefas) {
 
     day.tarefas.map(async (task, index) => {
 

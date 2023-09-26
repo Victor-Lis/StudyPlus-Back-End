@@ -195,23 +195,15 @@ async function checkNeedsCreate() {
 async function updateTime() {
   const today = new Date();
   const formattedDate = today.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-  const date = new Date(formattedDate)
-
-  date.setHours(0)
-  date.setMinutes(0)
-  date.setSeconds(0)
-  date.setMilliseconds(0)
-
-  function clearTime(today) {
-    today.setUTCHours(0);
-    today.setUTCMinutes(0);
-    today.setUTCSeconds(0);
-    today.setUTCMilliseconds(0);
-    console.log(today.toISOString())
-    return today.toISOString();
+  
+  function clearTime(date) {
+    console.log(date) // 26/09/2023, 00:00:00 -> 2023-09-25 00:00:00
+    let year = date.slice(6, 10)
+    let month = date.slice(3, 5)
+    let day = date.slice(0, 2)
+    return `${year}-${month}-${day}T00:00:00.000Z`;
   }
 
-  // console.log(clearTime(today))
   let day; 
 
   try{
@@ -227,7 +219,7 @@ async function updateTime() {
   
         date: {
   
-          equals: clearTime(today)
+          equals: clearTime(formattedDate)
   
         }
   
@@ -269,11 +261,13 @@ async function updateTime() {
 
       }
 
-      let hora = date.getHours()
-      let min = date.getMinutes()
+      let hora = today.getHours()
+      let min = today.getMinutes()
 
       console.log(firstTime)
       console.log(lastTime)
+      console.log(hora)
+      console.log(min)
       console.log(`${hora}:${min}`)
       console.log(hora > firstTime.hour)
       console.log(hora > lastTime.hour)

@@ -307,8 +307,6 @@ async function updateTime() {
 
       } else {
 
-        try{
-          
           prisma.$connect()
           week = await prisma.week.findFirst({
   
@@ -318,22 +316,18 @@ async function updateTime() {
   
             }
   
+          }).catch(e => {
+
+            console.log(e)
+    
           })
           prisma.$disconnect()
-
-        }catch(e){
-
-          console.log(e)
-
-        }
 
       }
     })
 
   } else {
   
-    try{
-          
       prisma.$connect()
       week = await prisma.week.findFirst({
 
@@ -343,14 +337,12 @@ async function updateTime() {
 
         }
 
+      }).catch(e => {
+
+        console.log(e)
+
       })
       prisma.$disconnect()
-
-    }catch(e){
-
-      console.log(e)
-
-    }
 
   }
 

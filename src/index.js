@@ -194,11 +194,13 @@ async function checkNeedsCreate() {
 
 async function updateTime() {
   const today = new Date();
+  const formattedDate = today.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  const date = new Date(formattedDate)
 
-  today.setHours(0)
-  today.setMinutes(0)
-  today.setSeconds(0)
-  today.setMilliseconds(0)
+  date.setHours(0)
+  date.setMinutes(0)
+  date.setSeconds(0)
+  date.setMilliseconds(0)
 
   function clearTime(today) {
     today.setUTCHours(0);
@@ -267,8 +269,8 @@ async function updateTime() {
 
       }
 
-      let hora = new Date().getHours()
-      let min = new Date().getMinutes()
+      let hora = date.getHours()
+      let min = date.getMinutes()
 
       console.log(firstTime)
       console.log(lastTime)

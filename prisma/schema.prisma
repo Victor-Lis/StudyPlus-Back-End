@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model Week {
@@ -56,5 +56,14 @@ model Categorie {
 
   task Task[]
   @@map("categories")
+
+}
+
+model Prompts {
+
+  id Int @id @default(autoincrement())
+
+  question String
+  response String
 
 }

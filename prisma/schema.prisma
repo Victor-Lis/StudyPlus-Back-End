@@ -39,11 +39,15 @@ model Task {
   primeira_hora String
   ultima_hora String
 
+  hours Float
+
   day Int
   Day Day? @relation(fields: [day], references: [id])
 
   categorie Int
   Categorie Categorie? @relation(fields: [categorie], references: [id])
+  
+  completed Boolean @default(false)
 
   @@map("tasks")
 }
@@ -65,5 +69,6 @@ model Prompts {
 
   question String
   response String
+  @@map("prompts")
 
 }

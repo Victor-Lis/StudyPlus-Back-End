@@ -13,6 +13,72 @@ function clearWhere(obj) {
     })
 }
 
+async function sumHours(task){
+    let day = await prisma.day.findFirst({
+        where: {
+            id: task.day
+        }
+    })
+
+    await prisma.day.update({
+        where: {
+            id: day.id
+        },
+        data: {
+            hours: day.hours + task.hours
+        }
+    })
+
+    let week = await prisma.week.findFirst({
+        where: {
+            id: day.week
+        }
+    })
+
+    await prisma.week.update({
+        where: {
+            id: week.id
+        },
+        data: {
+            hours: week.hours + task.hours
+        }
+    })
+
+}
+
+async function subHours(task){
+    let day = await prisma.day.findFirst({
+        where: {
+            id: task.day
+        }
+    })
+
+    await prisma.day.update({
+        where: {
+            id: day.id
+        },
+        data: {
+            hours: day.hours - task.hours
+        }
+    })
+
+    let week = await prisma.week.findFirst({
+        where: {
+            id: day.week
+        }
+    })
+
+    await prisma.week.update({
+        where: {
+            id: week.id
+        },
+        data: {
+            hours: week.hours - task.hours
+        }
+    })
+
+}
+
 taskRouter.get('/task', async (req, res) => {
 
     const { id, title, day } = req.query
@@ -72,7 +138,11 @@ taskRouter.post('/task/create', async (req, res) => {
                 ultima_hora: ultima_hora == "00:00" ? "24:00" : ultima_hora,
                 categorie,
                 day,
-                hours: parseFloat((lastHour-firstHour).toFixed(1)),
+                hours: parseFloat((lastHour - firstHour).toFixed(1)),
+            },
+            include: {
+                Categorie: true,
+                Day: true,
             }
         })
 
@@ -82,7 +152,7 @@ taskRouter.post('/task/create', async (req, res) => {
             }
         })
 
-        res.send(tasks)
+        res.send(task)
 
     }
 
@@ -106,37 +176,10 @@ taskRouter.post('/task/update', async (req, res) => {
             },
         })
 
-        if(initialTask.completed){
-            let day = await prisma.day.findFirst({
-                where:{
-                    id: initialTask.day
-                }
-            })
-            console.log(day)
-            day = await prisma.day.update({
-                where: {
-                    id: day.id
-                },
-                data:{
-                    hours: day.hours-initialTask.hours
-                }
-            })
-            console.log(day)
-            let week = await prisma.week.findFirst({
-                where:{
-                    id: day.week
-                }
-            })
-            console.log(week)
-            week = await prisma.week.update({
-                where: {
-                    id: week.id
-                },
-                data:{
-                    hours: week.hours-initialTask.hours
-                }
-            })
-            console.log(week)
+        if (initialTask.completed) {
+
+            await subHours(initialTask)
+
         }
 
         let firstHour
@@ -155,7 +198,7 @@ taskRouter.post('/task/update', async (req, res) => {
             }
 
 
-        }else if(!!ultima_hora) {
+        } else if (!!ultima_hora) {
 
             if (ultima_hora == "00:00") {
                 ultima_hora = "24:00"
@@ -172,7 +215,7 @@ taskRouter.post('/task/update', async (req, res) => {
             }
 
 
-        }else if(!!primeira_hora && !!ultima_hora){
+        } else if (!!primeira_hora && !!ultima_hora) {
 
             if (ultima_hora == "00:00") {
                 ultima_hora = "24:00"
@@ -180,15 +223,15 @@ taskRouter.post('/task/update', async (req, res) => {
 
             firstHour = (parseInt(primeira_hora.slice(0, 2)) * 60) + (parseInt(primeira_hora.slice(3, 5)))
             lastHour = (parseInt(ultima_hora.slice(0, 2)) * 60) + (parseInt(ultima_hora.slice(3, 5)))
-        
+
             if (!(firstHour < lastHour)) {
-        
+
                 res.sendStatus(502)
                 return
-        
+
             }
 
-        }else{
+        } else {
 
             firstHour = (parseInt(initialTask.primeira_hora.slice(0, 2)) * 60) + (parseInt(initialTask.primeira_hora.slice(3, 5)))
             lastHour = (parseInt(initialTask.ultima_hora.slice(0, 2)) * 60) + (parseInt(initialTask.ultima_hora.slice(3, 5)))
@@ -204,42 +247,20 @@ taskRouter.post('/task/update', async (req, res) => {
                 desc: desc ? desc : initialTask.desc,
                 primeira_hora: primeira_hora ? primeira_hora : initialTask.primeira_hora,
                 ultima_hora: ultima_hora ? ultima_hora : initialTask.ultima_hora,
-                categorie: categorie ? categorie : initialTask.categorie,
-                day: day ? day : initialTask.day,
-                hours: parseFloat((lastHour-firstHour).toFixed(1)),
+                categorie: categorie ? parseInt(categorie) : initialTask.categorie,
+                day: day ? parseInt(day) : initialTask.day,
+                hours: parseFloat((lastHour - firstHour).toFixed(1)),
+            },
+            include: {
+                Categorie: true,
+                Day: true,
             }
         })
 
-        if(task.completed){
-            let day = await prisma.day.findFirst({
-                where:{
-                    id: task.day
-                }
-            })
+        if (task.completed) {
 
-            await prisma.day.update({
-                where: {
-                    id: day.id
-                },
-                data:{
-                    hours: day.hours+task.hours
-                }
-            })
+            await sumHours(task)
 
-            let week = await prisma.week.findFirst({
-                where:{
-                    id: day.week
-                }
-            })
-
-            await prisma.week.update({
-                where: {
-                    id: week.id
-                },
-                data:{
-                    hours: week.hours+task.hours
-                }
-            })
         }
 
         let tasks = await prisma.task.findMany({
@@ -248,7 +269,7 @@ taskRouter.post('/task/update', async (req, res) => {
             }
         })
 
-        res.send(tasks)
+        res.send(task)
 
     }
 
@@ -286,83 +307,22 @@ taskRouter.post('/task/completed', async (req, res) => {
                     include: {
                         Week: true,
                     }
-                }
+                },
+                Categorie: true,
             }
         })
 
         if (!initialTask.completed && !!completed) {
 
-            let day = await prisma.day.findFirst({
-                where:{
-                    id: initialTask.day
-                }
-            })
-
-            await prisma.day.update({
-                where: {
-                    id: day.id
-                },
-                data:{
-                    hours: day.hours+initialTask.hours
-                }
-            })
-
-            let week = await prisma.week.findFirst({
-                where:{
-                    id: day.week
-                }
-            })
-
-            await prisma.week.update({
-                where: {
-                    id: week.id
-                },
-                data:{
-                    hours: week.hours+initialTask.hours
-                }
-            })
+            await sumHours(initialTask)
 
         } else if (initialTask.completed && !completed) {
 
-            let day = await prisma.day.findFirst({
-                where:{
-                    id: initialTask.day
-                }
-            })
-
-            await prisma.day.update({
-                where: {
-                    id: day.id
-                },
-                data:{
-                    hours: day.hours-initialTask.hours
-                }
-            })
-
-            let week = await prisma.week.findFirst({
-                where:{
-                    id: day.week
-                }
-            })
-
-            await prisma.week.update({
-                where: {
-                    id: week.id
-                },
-                data:{
-                    hours: week.hours-initialTask.hours
-                }
-            })
+            await subHours(initialTask)
 
         }
 
-        let tasks = await prisma.task.findMany({
-            orderBy: {
-                title: "asc"
-            }
-        })
-
-        res.send(tasks)
+        res.send(task)
     }
 
 })
@@ -380,13 +340,13 @@ taskRouter.post('/task/delete', async (req, res) => {
             },
         })
 
-        let tasks = await prisma.task.findMany({
-            orderBy: {
-                title: "asc"
-            }
-        })
+        if (task.completed) {
 
-        res.send(tasks)
+            await subHours(task)
+
+        }
+
+        res.send(task)
     }
 
 })

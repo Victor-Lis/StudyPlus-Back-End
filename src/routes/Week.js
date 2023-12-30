@@ -22,11 +22,11 @@ async function createWeek() {
 
     let daysNames = {
         0: "Domingo",
-        1: "Segunda-Feira",
-        2: "Terça-Feira",
-        3: "Quarta-Feira",
-        4: "Quinta-Feira",
-        5: "Sexta-Feira",
+        1: "Segunda",
+        2: "Terça",
+        3: "Quarta",
+        4: "Quinta",
+        5: "Sexta",
         6: "Sábado",
     }
 
@@ -82,7 +82,11 @@ weekRouter.get('/week', async (req, res) => {
         include: {
             days: {
                 include: {
-                    tarefas: true,
+                    tarefas: {
+                        include: {
+                            Categorie: true,
+                        }
+                    },
                 }
             },
         },
@@ -109,7 +113,11 @@ weekRouter.post('/week/create', async (req, res) => {
         include: {
             days: {
                 include: {
-                    tarefas: true,
+                    tarefas: {
+                        include: {
+                            Categorie: true,
+                        }
+                    },
                 }
             },
         },
@@ -138,10 +146,14 @@ weekRouter.post('/week/delete', async (req, res) => {
             include: {
                 days: {
                     include: {
-                        tarefas: true,
+                        tarefas: {
+                            include: {
+                                Categorie: true,
+                            }
+                        },
                     }
                 },
-            }
+            },
         })
 
         if (!!week && !!week.days && week.days.length) {
@@ -172,7 +184,11 @@ weekRouter.post('/week/delete', async (req, res) => {
             include: {
                 days: {
                     include: {
-                        tarefas: true,
+                        tarefas: {
+                            include: {
+                                Categorie: true,
+                            }
+                        },
                     }
                 },
             },

@@ -60,7 +60,7 @@ categorieRouter.post('/categorie/create', async (req, res) => {
             }
         })
 
-        res.send(categories)
+        res.send(categorie)
 
     }
 
@@ -98,7 +98,7 @@ categorieRouter.post('/categorie/update', async (req, res) => {
             }
         })
 
-        res.send(categories)
+        res.send(newCategorie)
 
     }
 

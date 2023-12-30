@@ -43,7 +43,6 @@ async function sumHours(task){
             hours: week.hours + task.hours
         }
     })
-
 }
 
 async function subHours(task){
@@ -76,7 +75,6 @@ async function subHours(task){
             hours: week.hours - task.hours
         }
     })
-
 }
 
 taskRouter.get('/task', async (req, res) => {

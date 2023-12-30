@@ -96,7 +96,7 @@ weekRouter.get('/week', async (req, res) => {
     })
 
     let today = new Date()
-    if (weeks[0].days[6].date.getTime() < today.getTime()) {
+    if ((!!weeks.length && !!weeks.days && (weeks[0].days[6].date.getTime() < today.getTime())) || !weeks.length) {
         let week = await createWeek()
         weeks.unshift(week)
     }

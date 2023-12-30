@@ -553,6 +553,22 @@ Exemplo:
 ## Restante do projeto
 [Study+ FrontEnd](https://github.com/Victor-Lis/StudyPlus-Front-End)
 
+## Instalação do Projeto
+```cmd
+git clone https://github.com/Victor-Lis/StudyPlus-Front-End & git clone https://github.com/Victor-Lis/StudyPlus-Back-End
+```
+
+## Inicialização 
+No endereço do repositório do Front-End
+```cmd
+npm start
+```
+
+No endereço do repositório do Back-End
+```cmd
+npm run dev
+```
+
 ## Autores
 
 - [@Victor-Lis](https://github.com/Victor-Lis)

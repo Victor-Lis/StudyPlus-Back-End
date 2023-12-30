@@ -2,6 +2,7 @@
 # Study+ BackEnd
 
 [Study+ FrontEnd](https://github.com/Victor-Lis/StudyPlus-Front-End)
+
 Esse é um projeto que ainda tenho muitos planos, essa ainda é a versão 1, mas já tenho em mente features futuras. Falando dele em si, eu já tinha esse projeto em mente há alguns meses, conversava bastante sobre a ideia com o [@Vinicius-Buava](https://github.com/Vinicius-B-Leite), além de já ter feito uma "versão anterior" desse projeto, mas ele estava bem simples e foi um dos meus primeiros projetos em Node, então existiam muitas melhoras a serem feitas.
 
 O projeto consiste em um sistema para ajudar a organizar seu tempo disposto em atividades mais focadas como estudo, sendo possível inclusive programar tarefas futuras(dentro do prazo de uma semana) para ajudar na organização. 
@@ -547,7 +548,11 @@ Exemplo:
 {
     "id": 1
 }
-``` 
+```
+
+## Restante do projeto
+[Study+ FrontEnd](https://github.com/Victor-Lis/StudyPlus-Front-End)
+
 ## Autores
 
 - [@Victor-Lis](https://github.com/Victor-Lis)

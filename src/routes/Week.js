@@ -14,11 +14,21 @@ function clearWhere(obj) {
 }
 
 async function createWeek() {
-    let days = []
-    let date = new Date()
-    let initialDay = date.getDate()
-    //`${year}-${month}-${day}T00:00:00.000Z`
+
     let week = await prisma.week.create({})
+
+    let today = new Date()
+    let days = []
+
+    while (today.getDay() != 0) {
+        today.setDate(today.getDate() - 1)
+    }
+
+    for (let i = 0; (today.getDay() <= 6) && (i < 7); i++) {
+        // console.log(today)
+        days.push(`${today.getDate() < 10 ? '0' + today.getDate() : today.getDate()}/${(today.getMonth() + 1) < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1)}/${today.getFullYear()}`)
+        today.setDate(today.getDate() + 1)
+    }
 
     let daysNames = {
         0: "Domingo",
@@ -30,22 +40,40 @@ async function createWeek() {
         6: "Sábado",
     }
 
-    let newDay
+    let monthsNames = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "September",
+        10: "October",
+        11: "November",
+        12: "December",
+    };
 
-    for(let i = 1; date.getDay() != 0; i++) {
-        newDay = initialDay - i
-        date.setDate(newDay)
-        console.log(date)
-    }
-    
-    for (let i = 0; i < 7; i++) {
+    let daysISOS = []
+    let daysObject = []
 
-        date.setDate(newDay + i)
+    days.map((day) => {
+        let d = parseInt(day.slice(0, 3))
+        let m = parseInt(day.slice(3, 6))
+        let y = parseInt(day.slice(6, 10))
+        daysISOS.push(`${day.slice(6, 10)}-${day.slice(3, 5)}-${day.slice(0, 2)}T00:00:00.000Z`)
+        daysObject.push(new Date(`${monthsNames[m]} ${d} ${y} 00:00:00`))
+    })
+
+    let daysData = [];
+
+    for (let i = 0; i < daysObject.length; i++) {
 
         let day = await prisma.day.create({
             data: {
-                date: date,
-                name: daysNames[date.getDay()],
+                date: daysObject[i],
+                name: daysNames[daysObject[i].getDay()],
                 Week: {
                     connect: {
                         id: week.id,
@@ -56,12 +84,13 @@ async function createWeek() {
                 tarefas: true,
             }
         })
-        days.push(day)
+
+        daysData.push(day)
 
     }
 
     week["days"] = days
-    console.log(week)
+    // console.log(week)
 
     return week
 }
@@ -96,7 +125,7 @@ weekRouter.get('/week', async (req, res) => {
     })
 
     let today = new Date()
-    if ((!!weeks.length && !!weeks.days && (weeks[0].days[6].date.getTime() < today.getTime())) || !weeks.length) {
+    if (((!!weeks.length && !!weeks[0].days.length) && (weeks[0].days[6].date.getTime() < today.getTime())) || !weeks.length) {
         let week = await createWeek()
         weeks.unshift(week)
     }
@@ -138,7 +167,7 @@ weekRouter.post('/week/delete', async (req, res) => {
     if (!!!id) {
         res.sendStatus(502)
     } else {
-        
+
         let week = await prisma.week.findFirst({
             where: {
                 id,

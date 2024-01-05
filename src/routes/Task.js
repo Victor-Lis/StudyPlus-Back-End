@@ -46,6 +46,7 @@ async function sumHours(task){
 }
 
 async function subHours(task){
+
     let day = await prisma.day.findFirst({
         where: {
             id: task.day
@@ -75,6 +76,7 @@ async function subHours(task){
             hours: week.hours - task.hours
         }
     })
+    
 }
 
 taskRouter.get('/task', async (req, res) => {
@@ -183,8 +185,8 @@ taskRouter.post('/task/update', async (req, res) => {
         let firstHour
         let lastHour
 
-        if (!!primeira_hora) {
-
+        if (!!primeira_hora && !ultima_hora) {
+            
             firstHour = (parseInt(primeira_hora.slice(0, 2)) * 60) + (parseInt(primeira_hora.slice(3, 5)))
             lastHour = (parseInt(initialTask.ultima_hora.slice(0, 2)) * 60) + (parseInt(initialTask.ultima_hora.slice(3, 5)))
 
@@ -196,7 +198,7 @@ taskRouter.post('/task/update', async (req, res) => {
             }
 
 
-        } else if (!!ultima_hora) {
+        } else if (!primeira_hora && !!ultima_hora) {
 
             if (ultima_hora == "00:00") {
                 ultima_hora = "24:00"

@@ -55,15 +55,13 @@ async function createWeek() {
         12: "December",
     };
 
-    let daysISOS = []
     let daysObject = []
 
     days.map((day) => {
         let d = parseInt(day.slice(0, 3))
         let m = parseInt(day.slice(3, 6))
         let y = parseInt(day.slice(6, 10))
-        daysISOS.push(`${day.slice(6, 10)}-${day.slice(3, 5)}-${day.slice(0, 2)}T00:00:00.000Z`)
-        daysObject.push(new Date(`${monthsNames[m]} ${d} ${y} 00:00:00`))
+        daysObject.push(new Date(`${monthsNames[m]} ${d} ${y} 23:59:00`))
     })
 
     let daysData = [];

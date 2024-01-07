@@ -62,13 +62,3 @@ model Categorie {
   @@map("categories")
 
 }
-
-model Prompts {
-
-  id Int @id @default(autoincrement())
-
-  question String
-  response String
-  @@map("prompts")
-
-}

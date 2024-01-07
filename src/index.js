@@ -16,9 +16,6 @@ app.use(categorieRouter)
 const taskRouter = require('./routes/Task')
 app.use(taskRouter)
 
-const promptRouter = require('./routes/Prompt')
-app.use(promptRouter)
-
 const port = process.env.PORT || 4000
 
 app.listen(port, () => {
